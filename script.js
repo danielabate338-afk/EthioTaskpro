@@ -1,5 +1,4 @@
-const API_BASE_URL = "http://127.0.0.1:5000";
-
+const API_URL = "https://ethiotaskpro-production.up.railway.app";
 let currentPhone = "";
 let currentTaskReward = 0;
 let activeTaskType = "";
