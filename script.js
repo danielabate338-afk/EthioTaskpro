@@ -1,4 +1,4 @@
-const API_URL = "https://ethiotaskpro-production.up.railway.app";
+const API_URL = "https://serpent-marigold-stapling.ngrok-free.dev";
 let currentPhone = "";
 let currentTaskReward = 0;
 let activeTaskType = "";
@@ -32,7 +32,7 @@ async function sendCodeRequest() {
     }
 
     try {
-        let response = await fetch(`${API_BASE_URL}/send-code`, {
+        let response = await fetch(`${API_URL}/send-code`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: currentPhone })
