@@ -1,4 +1,6 @@
-const API_URL = "https://serpent-marigold-stapling.ngrok-free.dev";
+// እዚህ ጋር አዲሱን የ Ngrok ሊንክ ሁልጊዜ ታስገባለህ
+const API_URL = "https://serpent-marigold-stapling.ngrok-free.dev"; 
+
 let currentPhone = "";
 let currentTaskReward = 0;
 let activeTaskType = "";
@@ -56,6 +58,7 @@ async function sendCodeRequest() {
     }
 }
 
+// ... የተቀረው የ DOMContentLoaded እና የTimer ኮድ እንደነበረ ነው ...
 document.addEventListener('DOMContentLoaded', () => {
     const otpBoxes = document.querySelectorAll('.otp-box');
     otpBoxes.forEach((box, index) => {
@@ -75,10 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let otpTimerInterval;
 function startOtpTimer() {
-    let timeLeft = 75; // ሰዓቱ ወደ 1:15 (75 ሰከንድ) ተስተካክሏል
+    let timeLeft = 75;
     const timerDisplay = document.getElementById('otp-timer');
     if (!timerDisplay) return;
-    
     clearInterval(otpTimerInterval);
     otpTimerInterval = setInterval(() => {
         if (timeLeft <= 0) {
@@ -98,6 +100,7 @@ function resendCode() {
     startOtpTimer();
 }
 
+// **እዚህ ጋር የተስተካከለ ነው (API_BASE_URL ወደ API_URL ተቀይሯል)**
 async function verifyOtpCode() {
     let codeBoxes = document.querySelectorAll('.otp-box');
     let code = "";
@@ -109,7 +112,7 @@ async function verifyOtpCode() {
     }
 
     try {
-        let response = await fetch(`${API_BASE_URL}/verify-code`, {
+        let response = await fetch(`${API_URL}/verify-code`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: currentPhone, code: code })
@@ -154,10 +157,11 @@ function openYouTubeTask() {
     simulateTaskCompletion();
 }
 
+// **እዚህ ጋርም የተስተካከለ ነው (API_BASE_URL ወደ API_URL ተቀይሯል)**
 async function simulateTaskCompletion() {
     setTimeout(async () => {
         try {
-            let response = await fetch(`${API_BASE_URL}/update-balance`, {
+            let response = await fetch(`${API_URL}/update-balance`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone: currentPhone, reward: currentTaskReward, task_type: activeTaskType })
