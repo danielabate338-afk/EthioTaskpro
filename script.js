@@ -1,6 +1,4 @@
-// እዚህ ጋር አዲሱን የ Ngrok ሊንክ ሁልጊዜ ታስገባለህ
 const API_URL = "https://serpent-marigold-stapling.ngrok-free.dev"; 
-
 let currentPhone = "";
 let currentTaskReward = 0;
 let activeTaskType = "";
