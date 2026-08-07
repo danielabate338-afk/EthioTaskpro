@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = "https://serpent-marigold-stapling.ngrok-free.dev";
 let currentPhone = "";
 let currentTaskReward = 0;
 let activeTaskType = "";
