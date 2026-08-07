@@ -1,4 +1,4 @@
-const API_URL = "https://serpent-marigold-stapling.ngrok-free.dev"; 
+const API_URL = "https://serpent-marigold-stapling.ngrok-free.dev";
 let currentPhone = "";
 let currentTaskReward = 0;
 let activeTaskType = "";
@@ -56,7 +56,6 @@ async function sendCodeRequest() {
     }
 }
 
-// ... የተቀረው የ DOMContentLoaded እና የTimer ኮድ እንደነበረ ነው ...
 document.addEventListener('DOMContentLoaded', () => {
     const otpBoxes = document.querySelectorAll('.otp-box');
     otpBoxes.forEach((box, index) => {
@@ -79,6 +78,7 @@ function startOtpTimer() {
     let timeLeft = 75;
     const timerDisplay = document.getElementById('otp-timer');
     if (!timerDisplay) return;
+    
     clearInterval(otpTimerInterval);
     otpTimerInterval = setInterval(() => {
         if (timeLeft <= 0) {
@@ -98,7 +98,6 @@ function resendCode() {
     startOtpTimer();
 }
 
-// **እዚህ ጋር የተስተካከለ ነው (API_BASE_URL ወደ API_URL ተቀይሯል)**
 async function verifyOtpCode() {
     let codeBoxes = document.querySelectorAll('.otp-box');
     let code = "";
@@ -155,7 +154,6 @@ function openYouTubeTask() {
     simulateTaskCompletion();
 }
 
-// **እዚህ ጋርም የተስተካከለ ነው (API_BASE_URL ወደ API_URL ተቀይሯል)**
 async function simulateTaskCompletion() {
     setTimeout(async () => {
         try {
